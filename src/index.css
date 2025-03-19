@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --color-mainGreen: #00D09E;
+  --color-mainLightGreen: #DFF7E2;
+  --color-mainSilverGreen: #0E3E3E;
+  --color-mainWhite: #F1FFF3;
+  --color-mainFontBold: #093030;
+}
+
+body{
+  font-family: 'Poppins', sans-serif;
+  color: #363130;
+  background: var(--color-mainWhite);
+}
+select:focus-visible, input:focus-visible, button:focus-visible{
+  outline: none;
+}
