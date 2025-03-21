@@ -17,7 +17,7 @@ import CategoryAction from "./app/CategoryAction";
 function App() {
 
   return (
-   <BrowserRouter>
+   <BrowserRouter basename="/smart-fin">
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<AppLayout />}>
