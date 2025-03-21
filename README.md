@@ -1,6 +1,10 @@
 # SmartFin Gerenciamento Financeiro
 
-O SmartFin é uma aplicação de gerenciamento financeiro desenvolvida com React, TypeScript e Vite. Este projeto visa fornecer uma interface intuitiva e eficiente para ajudar os usuários a gerenciar suas finanças pessoais.
+<img src="./docs/app.png" alt="App" weight="85%">
+
+<br />
+
+- O SmartFin é uma aplicação de gerenciamento financeiro desenvolvida com React, TypeScript e Vite. Este projeto foi criado para fins de estudo e desenvolvimento no âmbito do projeto de extensão da faculdade #Descomplica. Ele foi projetado para fornecer uma interface intuitiva e eficiente que ajuda os usuários a gerenciar suas finanças pessoais.
 
 ## Tecnologias Utilizadas
 
@@ -44,3 +48,10 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull re
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
+
+## 👤 Author
+
+| [<img src="https://avatars3.githubusercontent.com/u/106082564?s=96&v=4"><br><sub>Kleuton Novais</sub>](https://github.com/kleutons) |
+| :---------------------------------------------------------------------------------------------------------------------------------: |
+
+| [Linkedin](https://www.linkedin.com/in/kleuton-novais/)
