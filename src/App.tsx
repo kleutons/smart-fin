@@ -23,9 +23,9 @@ function App() {
       <Route path="/" element={<AppLayout />}>
         <Route index                         element={<HomePage />} />
         <Route path="/transactions"          element={<TransactionsPage />} />
-        <Route path="/transactions/action"   element={<TransactionsAction />} />
+        <Route path="/transactions/action/:id?"   element={<TransactionsAction />} />
         <Route path="/categories"            element={<CategoryPage />} />
-        <Route path="/categories/action"     element={<CategoryAction />} />
+        <Route path="/categories/action/:id?" element={<CategoryAction />} />
 
         <Route path="/profile"              element={<ProfilePage />} />
         <Route path="profile/edit"          element={<ProfileEdit />} />

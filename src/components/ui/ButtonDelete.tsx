@@ -4,11 +4,11 @@ interface ButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLButtonElem
     wFull?: boolean;
 }
 
-export default function ButtonSecondary(props : ButtonSecondaryProps){
+export default function ButtonDelete(props : ButtonSecondaryProps){
     const isWFull = props.wFull ? 'w-full' : '';
 
     return(
-        <button type="button" className={`bg-mainLightGreen text-mainFontBold font-semibold py-2 px-3 rounded-xl ${isWFull} ${props.addClass}`} {...props}>
+        <button type="button" className={`bg-rose-100 text-rose-900 py-2 px-3 rounded-xl ${isWFull} ${props.addClass}`} {...props}>
             {props.children}
         </button>
     )

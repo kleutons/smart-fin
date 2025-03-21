@@ -1,12 +1,12 @@
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string,
-    value?: string
 }
-export default function Input(props : InputProps){
+
+export default function Input({ label, type = "text", ...props } : InputProps){
     return(
         <div className='flex flex-col'>
-            <label className='ml-3 text-mainFontBold/70'>{props.label}</label>
-            <input type='text' className='bg-mainLightGreen p-3 rounded-xl'  value={props.value} />
+            <label className='ml-3 text-mainFontBold/70'>{label}</label>
+            <input type={type} className='bg-mainLightGreen p-3 rounded-xl'  {...props} />
         </div>
     )
 }

@@ -43,7 +43,7 @@ export default function ProfilePage(){
                 <div className='w-36 h-36 rounded-full shadow-xl'>
                     <img src={userImg} className='rounded-full' />
                 </div>
-                <h1 className='text-mainFontBold font-semibold text-xl'>Kleuton</h1>
+                <h1 className='text-mainFontBold font-semibold text-xl'>Usuário</h1>
             </div>
 
             <div className='flex flex-col gap-6'>

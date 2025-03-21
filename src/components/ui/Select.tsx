@@ -1,17 +1,18 @@
 interface SelectProps {
     addClass?:string;
-    options: { value: string; label: string }[];
-    selectedValue?: string;
+    options: { value: number; label: string }[];
+    selectedValue?: number;
     placeholder?: string;
-    onChange: (value: string) => void;
+    onChange: (value: number) => void;
 }
 
 export default function Select({ addClass, options, selectedValue, placeholder, onChange }: SelectProps) {
     return (
         <select
-            className={`bg-mainLightGreen text-mainFontBold rounded-xl p-2 text-center ${addClass}`}
+            className={`bg-mainLightGreen text-mainFontBold rounded-xl p-2  ${addClass}`}
             value={selectedValue || ""}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(parseInt(e.target.value))}
+            required
         >
             {placeholder && (
                 <option value="" disabled>
