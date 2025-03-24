@@ -39,7 +39,7 @@ export default function FooterMenu(){
                         <item.icon 
                             size={45} 
                             strokeWidth={1} 
-                            className={`p-2 rounded-2xl text-mainFontBold transition-all duration-300 ${location.pathname === item.url || firstPart == item.url ? 'bg-mainGreen' : 'bg-mainWhite'}`} 
+                            className={`p-2 rounded-2xl text-mainFontBold transition-all duration-300 cursor-pointer ${location.pathname === item.url || firstPart == item.url ? 'bg-mainGreen' : 'bg-mainWhite'}`} 
                             onClick={()=>navigate(item.url)} 
                             key={index}
                         />

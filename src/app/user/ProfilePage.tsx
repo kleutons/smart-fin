@@ -48,7 +48,7 @@ export default function ProfilePage(){
 
             <div className='flex flex-col gap-6'>
                 {menuList.map((item, index)=>(
-                    <button key={index} className='flex gap-3 items-center' onClick={()=>navigate(item.url)}>
+                    <button key={index} className='flex gap-3 items-center cursor-pointer' onClick={()=>navigate(item.url)}>
                         <item.icon size={50} strokeWidth={1.5} className='bg-mainLightGreen p-2 rounded-2xl'  />
                         <p>{item.label}</p>
                     </button>
