@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "host": "vite --host",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && copy dist\\index.html dist\\404.html",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
