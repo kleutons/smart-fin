@@ -4,6 +4,7 @@ import { initDB, TAB_CATEGORY, TAB_TRANSACTION } from './dbService';
 export interface TypeCategoryNew {
   name: string;
   icon: string;
+  idUser: number;
 }
 
 export interface TypeCategory extends TypeCategoryNew {
@@ -12,13 +13,13 @@ export interface TypeCategory extends TypeCategoryNew {
 
 // Categorias padrão
 const DEFAULT_CATEGORIES: TypeCategoryNew[] = [
-  { name: 'Salário', icon: 'DollarSign' },
-  { name: 'Casa', icon: 'Home' },
-  { name: 'Transporte', icon: 'Car' },
-  { name: 'Alimentação', icon: 'Utensils' },
-  { name: 'Mercado', icon: 'ShoppingCart' },
-  { name: 'Fixa', icon: 'HandCoins' },
-  { name: 'Fornecedor', icon: 'Box' }
+  { name: 'Salário', icon: 'DollarSign', idUser:1 },
+  { name: 'Casa', icon: 'Home', idUser:1 },
+  { name: 'Transporte', icon: 'Car', idUser:1 },
+  { name: 'Alimentação', icon: 'Utensils', idUser:1 },
+  { name: 'Mercado', icon: 'ShoppingCart', idUser:1 },
+  { name: 'Fixa', icon: 'HandCoins', idUser:1 },
+  { name: 'Fornecedor', icon: 'Box', idUser:1 }
 ];
 
 class CategoryService {
@@ -85,20 +86,15 @@ class CategoryService {
   };
 
   // Buscar por nome
-  public async getByName(name:string):Promise<TypeCategory | undefined>{
-    await this.initialize();
-    const db = this.validateDB();
-    const tx = db.transaction(TAB_CATEGORY, 'readonly');
-    const store = tx.objectStore(TAB_CATEGORY);
-    
-    let cursor = await store.openCursor();
-    while (cursor) {
-      const category = cursor.value as TypeCategory;
-      if (category.name === name) {
-        return category; // Retorna a categoria encontrada
-      }
-      cursor = await cursor.continue(); // Move o cursor para o próximo item
-    }
+  public async getByName(name:string, idUser?: number):Promise<TypeCategory | undefined>{
+
+    const categories = await this.listAll();
+
+    categories.map((item) => {
+        if((idUser && item.idUser == idUser) && item.name == name ){
+          return item;
+        }
+    })
   
     return undefined; 
     
@@ -109,7 +105,7 @@ class CategoryService {
       await this.initialize();
 
       // Verificar se já existe uma categoria com o mesmo nome
-      const existingCategory = await this.getByName(category.name);
+      const existingCategory = await this.getByName(category.name, category.idUser);
       if (existingCategory) {
         throw new Error(`Categoria com o nome "${category.name}" já existe.`);
       }

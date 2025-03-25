@@ -44,8 +44,6 @@ export default function TransactionsAction(){
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        console.log(editData);
-
         if (!editData?.name || !editData?.amount || !editData.categoryId) {
         alert("Por favor, preencha todos os campos!");
         return;

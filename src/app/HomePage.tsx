@@ -8,19 +8,18 @@ import { calculateSummary } from "../utils/calculateSummary";
 import { useCategory } from "../hooks/useCategory";
 import { topThreeExpensesCategory } from "../utils/topThreeExpensesCategory ";
 import { IconCategory } from "../utils/IconsCategory";
+import useAuth from "../hooks/useAuth";
 
 export default function HomePage() {
 
     const { loadByMonth, transactions } = useTransaction();
     const { categories } = useCategory();
     const { saldo, despesas } = calculateSummary(transactions);
-    
+    const { dataUser } = useAuth();
     
     const navigate = useNavigate();
     
     const topThree = topThreeExpensesCategory(transactions, categories);
-
-    console.log(topThree);
 
     // Função para renderizar o ícone com base no nome salvo
     const renderIcon = (iconName: string) => {
@@ -37,7 +36,7 @@ export default function HomePage() {
         <ContainerTop>
             <div className="text-2xl font-light pt-3.5">
                 <p>Bem Vindo(a)</p>
-                <p>Úsuario</p>
+                <p>{dataUser? dataUser.name : 'Usuário'}</p>
             </div>
         </ContainerTop>
         <ContainerMain>

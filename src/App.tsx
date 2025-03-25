@@ -12,6 +12,8 @@ import EditPassword from "./app/user/EditPassword";
 import DevPage from "./app/DevPage";
 import TransactionsAction from "./app/TransactionsAction";
 import CategoryAction from "./app/CategoryAction";
+import ProtectedRoute from "./components/ProtectedRoute";
+import CreateAccountPage from "./app/CreateAccountPage";
 
 
 function App() {
@@ -20,7 +22,8 @@ function App() {
    <BrowserRouter basename="/smart-fin">
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/" element={<AppLayout />}>
+      <Route path="/create-account" element={<CreateAccountPage />} />
+      <Route path="/" element={<ProtectedRoute element={<AppLayout />} />}>
         <Route index                         element={<HomePage />} />
         <Route path="/transactions"          element={<TransactionsPage />} />
         <Route path="/transactions/action/:id?"   element={<TransactionsAction />} />

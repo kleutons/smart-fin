@@ -20,7 +20,7 @@ export default function CategoryAction() {
 
   const navigate = useNavigate();
 
-  const emptyCategory:TypeCategory = {id: idCategory, name: '', icon: ''};
+  const emptyCategory:TypeCategory = {id: idCategory, name: '', icon: '', idUser: 1};
   const [categoryData, setCategoryData] = useState<TypeCategory>(emptyCategory);
 
   // Carregar a categoria para edição

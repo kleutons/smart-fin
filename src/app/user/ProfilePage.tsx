@@ -4,6 +4,8 @@ import Header from '../../components/ui/Header';
 import { KeyRound, LaptopMinimalCheck, LogOut, User } from 'lucide-react';
 import userImg from '../../assets/img/user.webp';
 import { useNavigate } from 'react-router';
+import useAuth from '../../hooks/useAuth';
+import { Toaster } from 'react-hot-toast';
 
 const menuList = [
     {
@@ -20,20 +22,24 @@ const menuList = [
         icon: LaptopMinimalCheck,
         label: "Desenvolvedor",
         url: '/dev'
-    },
-    {
-        icon: LogOut,
-        label: "Sair",
-        url: '/profile'
-    },
+    }
 ]
 
 export default function ProfilePage(){
 
     const navigate = useNavigate();
+    const {logout, dataUser} = useAuth();
+    
+
+    const handleLogout = () => {
+        navigate('/');
+        logout();
+    }
 
     return(
         <>
+        <Toaster />
+        
          <ContainerTop>
              <Header title='Perfil' />
              <div className='h-18'><span></span></div>
@@ -41,9 +47,9 @@ export default function ProfilePage(){
         <ContainerMain>
             <div className='mb-10 flex flex-col gap-4 items-center -mt-24'>
                 <div className='w-36 h-36 rounded-full shadow-xl'>
-                    <img src={userImg} className='rounded-full' />
+                    <img src={dataUser?.urlImage? dataUser.urlImage : userImg} className='rounded-full' />
                 </div>
-                <h1 className='text-mainFontBold font-semibold text-xl'>Usuário</h1>
+                <h1 className='text-mainFontBold font-semibold text-xl'>{dataUser? dataUser.name : 'Usuário'}</h1>
             </div>
 
             <div className='flex flex-col gap-6'>
@@ -53,6 +59,10 @@ export default function ProfilePage(){
                         <p>{item.label}</p>
                     </button>
                 ))}
+                <button className='flex gap-3 items-center cursor-pointer' onClick={handleLogout}>
+                    <LogOut size={50} strokeWidth={1.5} className='bg-mainLightGreen p-2 rounded-2xl'  />
+                    <p>Sair</p>
+                </button>
             </div>
         </ContainerMain>
         </>
