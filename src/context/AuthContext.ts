@@ -4,6 +4,7 @@ import { TypeUserReturn } from "../services/UserService";
 interface AuthContextType {
     isAuthenticated: boolean;
     login: (email:string, password:string) => Promise<boolean>; 
+    loginDefault: () => Promise<boolean>; 
     logout: () => void;
     dataUser: TypeUserReturn | undefined;
     getUserEmail: () => string | undefined;
@@ -13,6 +14,7 @@ interface AuthContextType {
 const initialContextValue: AuthContextType ={
     isAuthenticated: false,
     login: async () => false,
+    loginDefault: async () => false,
     logout: () => {},
     dataUser: undefined,
     getUserEmail: () => undefined,

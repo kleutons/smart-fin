@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import CategoryService, { TypeCategory } from '../services/CategoryService';
+
 
 export const useCategory = () => {
   const [categories, setCategories] = useState<TypeCategory[]>([]);
   const service = new CategoryService();
 
   // Carregar categorias
-  const loadCategories = async () => {
+  const loadCategories = async (userId:number) => {
     try {
-      const result = await service.listAll();
+      const result = await service.listAllByUserId(userId);
       setCategories(result);
     } catch (error) {
       console.error('Erro ao carregar categorias:', error);
@@ -17,21 +18,23 @@ export const useCategory = () => {
     }
   };
 
+  
   // Criar ou atualizar categoria
-  const createOrUpdate = async (category: TypeCategory) => {
-    try {
-      if (category.id === undefined || category.id == 0) {
-        await service.insert({name: category.name, icon: category.icon});
-        toast.success('Categoria cadastrada com sucesso!');
-      } else {
-        await service.update(category);
-        toast.success('Categoria atualizada com sucesso!');
+  const createOrUpdate = async (category: TypeCategory, userId: number) => {
+      try {
+        if (category.id === undefined || category.id == 0) {
+          await service.insert({name: category.name, icon: category.icon, userId: userId});
+          toast.success('Categoria cadastrada com sucesso!');
+        } else {
+          await service.update(category);
+          toast.success('Categoria atualizada com sucesso!');
+        }
+        await loadCategories(userId); // Atualiza a lista após a operação
+      } catch (error) {
+        console.error('Erro ao salvar a categoria:', error);
+        toast.error('Erro ao salvar a categoria.');
       }
-      await loadCategories(); // Atualiza a lista após a operação
-    } catch (error) {
-      console.error('Erro ao salvar a categoria:', error);
-      toast.error('Erro ao salvar a categoria.');
-    }
+   
   };
 
   // Buscar categoria por ID
@@ -56,10 +59,6 @@ export const useCategory = () => {
       toast.error('Erro ao excluir a categoria: ' + error);
     }
   };
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
 
   return {
     loadCategories,

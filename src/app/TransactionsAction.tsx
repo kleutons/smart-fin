@@ -11,17 +11,28 @@ import { TypeTransaction } from "../services/TransactionService";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTransaction } from "../hooks/useTransaction ";
 import { Trash } from "lucide-react";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 export default function TransactionsAction(){
     const { id } = useParams();
+    const {dataUser} = useAuth();
+
     const idTransaction:number = id ? parseInt(id) : 0;
     const { createOrUpdate, getById, deleteTransaction } = useTransaction();
-    const emptyData:TypeTransaction = {id: idTransaction, name: '', categoryId:0, amount:0 , date: new Date(new Date().toLocaleDateString('en-CA')) };
+    const emptyData:TypeTransaction = {
+                                        id: idTransaction, name: '',
+                                        amount:0 , 
+                                        date: new Date(new Date().toLocaleDateString('en-CA')), 
+                                        categoryId:0, 
+                                        categoryIcon: '', 
+                                        userId: dataUser?.id ? dataUser.id : 0 
+                                    };
     const [editData, setEditData] = useState<TypeTransaction>(emptyData);
 
     const navigate = useNavigate();
 
-    const { categories } = useCategory();
+    const { loadCategories, categories } = useCategory();
     const handleOptionSelectCategory = () => {
         return categories.map((item)=>({ value: item.id, label: item.name }))
     };
@@ -40,6 +51,12 @@ export default function TransactionsAction(){
     }
     }, [idTransaction]);
 
+    useEffect(()=>{
+        if(dataUser?.id){
+            loadCategories(dataUser.id)
+        }
+    },[dataUser]);
+
      // Salvar ou atualizar
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,12 +65,17 @@ export default function TransactionsAction(){
         alert("Por favor, preencha todos os campos!");
         return;
         }
-        await createOrUpdate(editData);
-        navigate('/transactions');
+        if(dataUser?.id){
+            await createOrUpdate(editData, dataUser.id);
+            navigate('/transactions');
+        }else{
+            toast.error("Erro ao Encontrar Usuário.")
+        }
     };
 
     const handleSelectCategory = (value: number) => {
-        setEditData((prev) => ({ ...prev, categoryId: value }));
+        const iconCategory = categories.find((item)=> item.id == value );
+        setEditData((prev) => ({ ...prev, categoryId: value, categoryIcon: iconCategory?.icon ?  iconCategory.icon  : ''}));
     }
 
     const handleDelete = async () => {

@@ -6,7 +6,10 @@ interface Summary {
     despesas: number;
 }
 
-export const calculateSummary = (transactions: TypeTransaction[]): Summary => {
+export const calculateSummary = (transactions: TypeTransaction[] | undefined): Summary => {
+    if(!transactions)
+        return  { saldo: 0, despesas: 0 };
+    
     const summary = transactions.reduce<Summary>(
         (acc, transaction) => {
             if (transaction.amount >= 0) {

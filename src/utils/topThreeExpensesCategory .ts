@@ -9,9 +9,13 @@ interface CategoryExpense {
 }
 
 export const topThreeExpensesCategory = (
-    transactions: TypeTransaction[],
+    transactions: TypeTransaction[] | undefined,
     categories: TypeCategory[]
   ): CategoryExpense[] => {
+
+    if(!transactions) 
+      return [];
+    
     // Filtrar apenas despesas (valores negativos)
     const negativeTransactions = transactions.filter(
       (transaction) => transaction.amount < 0

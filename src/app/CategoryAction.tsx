@@ -10,17 +10,21 @@ import { IconCategory } from "../utils/IconsCategory";
 import { useCategory } from "../hooks/useCategory";
 import { TypeCategory } from "../services/CategoryService";
 import { Trash } from "lucide-react";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 
 export default function CategoryAction() {
   const { id } = useParams();
+  const {dataUser} = useAuth();
+  
   const idCategory:number = id ? parseInt(id) : 0;
   const isEditing = id !== undefined;
   const { createOrUpdate, getById, deleteCategory } = useCategory();
 
   const navigate = useNavigate();
 
-  const emptyCategory:TypeCategory = {id: idCategory, name: '', icon: '', idUser: 1};
+  const emptyCategory:TypeCategory = {id: idCategory, name: '', icon: '', userId: dataUser?.id ? dataUser.id : 0};
   const [categoryData, setCategoryData] = useState<TypeCategory>(emptyCategory);
 
   // Carregar a categoria para edição
@@ -49,8 +53,12 @@ export default function CategoryAction() {
       alert("Por favor, selecione um ícone!");
       return;
     }
-    await createOrUpdate(categoryData);
-    navigate('/categories');
+    if(dataUser?.id){
+      await createOrUpdate(categoryData, dataUser.id);
+      navigate('/categories');
+    }else{
+      toast.error("Erro ao Encontrar Usuário.")
+    }
   };
 
   

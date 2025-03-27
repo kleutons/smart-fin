@@ -20,11 +20,11 @@ export interface TypeUser extends TypeUserNew {
   id: number;
 }
 
-const NewUserDefault:TypeUser = {
+export const NewUserDefault:TypeUser = {
   id: 1,
   name: 'Usuário',
-  email: 'seuemail@email.com',
-  password: ''
+  email: 'usuario@email.comm',
+  password: '123456'
 };
 
 class UserService {
@@ -54,9 +54,13 @@ class UserService {
 
         // Adicionar usuario padrão apenas se o banco estiver vazio
         if (allUser.length === 0) {
-            this.insert(NewUserDefault);
+            try{
+              await this.insert(NewUserDefault);
+            }catch(error){
+              console.log(error);
+            }
         }
-    }
+  }
 
   // Validar se o banco foi inicializado
   private validateDB(): IDBPDatabase<unknown> {
@@ -67,13 +71,13 @@ class UserService {
   }
 
   // Buscar todas as categorias
-    private async listAll(): Promise<TypeUser[]> {
-        await this.initialize();
-        const db = this.validateDB();
-        const tx = db.transaction(TAB_USER, 'readonly');
-        const store = tx.objectStore(TAB_USER);
-        return await store.getAll();
-    }
+  public async listAll(): Promise<TypeUser[]> {
+      await this.initialize();
+      const db = this.validateDB();
+      const tx = db.transaction(TAB_USER, 'readonly');
+      const store = tx.objectStore(TAB_USER);
+      return await store.getAll();
+  }
 
   // Buscar Usuario por Id
   public async getById(id:number):Promise<TypeUser | undefined>{
@@ -99,9 +103,7 @@ class UserService {
       }
       cursor = await cursor.continue(); // Move o cursor para o próximo item
     }
-  
     return undefined; 
-    
   };
 
   //Add User
@@ -114,8 +116,10 @@ class UserService {
         throw new Error(`Usuário já existe, faça o login!`);
       }
 
+
       //Check se é usuario padrão para atualizar o mesmo  
       const userDefault = await this.getById(1);
+
 
       if(userDefault?.name === NewUserDefault.name  && userDefault?.email === NewUserDefault.email ){
           this.update({id:1, name:user.name, email: user.email, password: user.password});
@@ -127,7 +131,7 @@ class UserService {
         user.password = await generateHash(user.password);
       }
 
-      const db = this.validateDB();
+      const db = this.validateDB();      
       const tx = db.transaction(TAB_USER, 'readwrite');
       const store = tx.objectStore(TAB_USER);
       await store.add(user);

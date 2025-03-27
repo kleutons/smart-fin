@@ -17,6 +17,15 @@ export default function HomePage() {
     const { saldo, despesas } = calculateSummary(transactions);
     const { dataUser } = useAuth();
     
+    const month = new Date().getMonth();
+    const year = new Date().getFullYear();
+    const monthNames = [
+      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+    const monthName = monthNames[month]; 
+  
+
     const navigate = useNavigate();
     
     const topThree = topThreeExpensesCategory(transactions, categories);
@@ -27,9 +36,12 @@ export default function HomePage() {
       return icon ? <icon.icon size="65%" strokeWidth={1.5} /> : null; // Renderiza o ícone ou nada
     };
 
-    useEffect(() => {
-        loadByMonth(3, 2025);
-    }, []);
+
+    useEffect(()=>{
+      if(dataUser?.id){
+        loadByMonth((month +1), year, dataUser.id);
+      }
+    },[dataUser]);
 
     return (
       <>
@@ -60,7 +72,7 @@ export default function HomePage() {
 
             <div className="mt-3 bg-mainLightGreen rounded-4xl text-mainFontBold/65 p-6">
               <h2 className="font-semibold uppercase">
-                Março 2025
+                {monthName} {year}
               </h2>
               <div className="flex gap-4">
 

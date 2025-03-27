@@ -14,6 +14,7 @@ import TransactionsAction from "./app/TransactionsAction";
 import CategoryAction from "./app/CategoryAction";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CreateAccountPage from "./app/CreateAccountPage";
+import TesterPage from "./app/TesterPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/create-account" element={<CreateAccountPage />} />
+      <Route path="/tester" element={<TesterPage />} />
       <Route path="/" element={<ProtectedRoute element={<AppLayout />} />}>
         <Route index                         element={<HomePage />} />
         <Route path="/transactions"          element={<TransactionsPage />} />

@@ -4,7 +4,7 @@ import { initDB, TAB_CATEGORY, TAB_TRANSACTION } from './dbService';
 export interface TypeCategoryNew {
   name: string;
   icon: string;
-  idUser: number;
+  userId: number;
 }
 
 export interface TypeCategory extends TypeCategoryNew {
@@ -13,13 +13,13 @@ export interface TypeCategory extends TypeCategoryNew {
 
 // Categorias padrão
 const DEFAULT_CATEGORIES: TypeCategoryNew[] = [
-  { name: 'Salário', icon: 'DollarSign', idUser:1 },
-  { name: 'Casa', icon: 'Home', idUser:1 },
-  { name: 'Transporte', icon: 'Car', idUser:1 },
-  { name: 'Alimentação', icon: 'Utensils', idUser:1 },
-  { name: 'Mercado', icon: 'ShoppingCart', idUser:1 },
-  { name: 'Fixa', icon: 'HandCoins', idUser:1 },
-  { name: 'Fornecedor', icon: 'Box', idUser:1 }
+  { name: 'Salário', icon: 'DollarSign', userId:1 },
+  { name: 'Casa', icon: 'Home', userId:1 },
+  { name: 'Transporte', icon: 'Car', userId:1 },
+  { name: 'Alimentação', icon: 'Utensils', userId:1 },
+  { name: 'Mercado', icon: 'ShoppingCart', userId:1 },
+  { name: 'Fixa', icon: 'HandCoins', userId:1 },
+  { name: 'Fornecedor', icon: 'Box', userId:1 }
 ];
 
 class CategoryService {
@@ -43,7 +43,7 @@ class CategoryService {
     if (this.seedExecuted)  return;
 
     this.seedExecuted = true; // Marca como executado
-    const allCategories = await this.listAll();
+    const allCategories = await this.listAllByUserId(1);
 
     // Adicionar categorias padrão apenas se o banco estiver vazio
     if (allCategories.length === 0) {
@@ -68,13 +68,22 @@ class CategoryService {
   }
 
   // Buscar todas as categorias
-  public async listAll(): Promise<TypeCategory[]> {
+  public async listAllByUserId(id:number): Promise<TypeCategory[]> {
       await this.initialize();
       const db = this.validateDB();
       const tx = db.transaction(TAB_CATEGORY, 'readonly');
       const store = tx.objectStore(TAB_CATEGORY);
-      return await store.getAll();
+      const index = store.index('userId');
+    
+      const returnCategories: TypeCategory[] = [];
+        let cursor = await index.openCursor(id);
+        while (cursor) {
+          returnCategories.push(cursor.value);
+          cursor = await cursor.continue();
+        }
+      return returnCategories;
   }
+
 
   // Buscar Categoria por Id
   public async getById(id:number):Promise<TypeCategory | undefined>{
@@ -86,12 +95,12 @@ class CategoryService {
   };
 
   // Buscar por nome
-  public async getByName(name:string, idUser?: number):Promise<TypeCategory | undefined>{
+  public async getByName(name:string, userId: number):Promise<TypeCategory | undefined>{
 
-    const categories = await this.listAll();
+    const categories = await this.listAllByUserId(userId);
 
     categories.map((item) => {
-        if((idUser && item.idUser == idUser) && item.name == name ){
+        if(item.userId == userId && item.name == name ){
           return item;
         }
     })
@@ -105,7 +114,7 @@ class CategoryService {
       await this.initialize();
 
       // Verificar se já existe uma categoria com o mesmo nome
-      const existingCategory = await this.getByName(category.name, category.idUser);
+      const existingCategory = await this.getByName(category.name, category.userId);
       if (existingCategory) {
         throw new Error(`Categoria com o nome "${category.name}" já existe.`);
       }

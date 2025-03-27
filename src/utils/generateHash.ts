@@ -1,8 +1,6 @@
-export default async function generateHash(password: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+import SHA256 from 'crypto-js/sha256';
+
+export default function generateHash(password: string) {
+    const hash = SHA256(password).toString();
+    return hash;
 }

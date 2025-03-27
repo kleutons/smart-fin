@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
-import UserService, { TypeUserReturn } from "../services/UserService";
+import UserService, {TypeUserReturn } from "../services/UserService";
 import toast from "react-hot-toast";
 import generateHash from "../utils/generateHash";
 
@@ -58,6 +58,23 @@ export const AuthProvider = ({children}:Props) => {
         }
     };
 
+    
+    const loginDefault = async ():Promise<boolean> => {
+        const emailDefault = 'usuario@email.comm';
+        setIsAuthenticated(false);
+        const userLogin = await service.getByEmail(emailDefault);
+        if(userLogin){
+            toast.success('Login Realizado com Sucesso!');
+            setItemWithExpiration(emailLocalStorage, emailDefault, 30);
+            setIsAuthenticated(true);
+            return true;
+        }else{
+            toast.error('Não foi possível entrar sem conta. Por favor Crie uma Nova Conta!');
+            return false;
+        }
+    }
+
+
     const logout = () => {
         setIsAuthenticated(false);
         localStorage.removeItem(emailLocalStorage);
@@ -95,6 +112,7 @@ export const AuthProvider = ({children}:Props) => {
             value={{
                 isAuthenticated,
                 login,
+                loginDefault,
                 logout,
                 dataUser,
                 getUserEmail,

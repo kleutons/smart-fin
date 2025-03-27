@@ -7,11 +7,14 @@ import { useNavigate } from "react-router";
 import { useCategory } from "../hooks/useCategory";
 import { IconCategory } from "../utils/IconsCategory";
 import { Toaster } from "react-hot-toast";
+import { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
 
 export default function CategoryPage() {
+  const {dataUser} = useAuth();
   const navigate = useNavigate();
-  const { categories } = useCategory();
+  const { categories, loadCategories } = useCategory();
 
   // Função para renderizar o ícone com base no nome salvo
   const renderIcon = (iconName: string) => {
@@ -19,6 +22,12 @@ export default function CategoryPage() {
     return icon ? <icon.icon size="65%" strokeWidth={1.5} /> : null; // Renderiza o ícone ou nada
   };
 
+  useEffect(()=>{
+    if(dataUser?.id){
+      loadCategories(dataUser?.id);
+    }
+  },[dataUser]);
+  
   return (
     <>
       <Toaster/>

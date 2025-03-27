@@ -4,8 +4,10 @@ import { initDB, TAB_TRANSACTION } from "./dbService";
 export interface TypeTransactionNew {
   name: string;
   amount: number;
-  categoryId: number;
   date: Date;
+  categoryId: number;
+  categoryIcon:string;
+  userId: number;
 }
 
 export interface TypeTransaction extends TypeTransactionNew {
@@ -44,7 +46,7 @@ class TransactionService {
   }
 
   // Listar transações por mês e ano
-  public async listByMonth(month: number, year: number): Promise<TypeTransaction[]> {
+  public async listByMonth(month: number, year: number, userId:number): Promise<TypeTransaction[]> {
     await this.initialize();
     const db = this.validateDB();
     const tx = db.transaction(TAB_TRANSACTION, 'readonly');
@@ -54,13 +56,14 @@ class TransactionService {
     // Criar intervalo de busca para o mês e ano fornecidos
     const startDate = new Date(year, month - 1, 1); // Primeiro dia do mês
     const endDate = new Date(year, month, 0); // Último dia do mês
-  
     const range = IDBKeyRange.bound(startDate, endDate, false, false); // Intervalo de datas
+
     let cursor = await index.openCursor(range);
-  
     const transactions: TypeTransaction[] = [];
     while (cursor) {
-      transactions.push(cursor.value);
+      if(cursor.value.userId == userId){
+        transactions.push(cursor.value);
+      }
       cursor = await cursor.continue();
     }
   
