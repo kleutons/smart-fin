@@ -51,9 +51,9 @@ export default function TransactionsPage(){
 
     // Exemplo de Uso
     const { saldo, despesas } = calculateSummary(transactions);
-    const percentage = saldo > 0 ? (Math.abs(despesas) / saldo) * 100 : 0;
+    const percentage =   Math.round(Math.abs((Math.abs(despesas) / (saldo <= 0 ? despesas : saldo)) * 100)) ;
 
-
+   
     return(
         <>
         <Toaster/>
@@ -80,13 +80,15 @@ export default function TransactionsPage(){
                     </div>
                 </div>
 
-                <div className="bg-mainLightGreen rounded-2xl flex justify-end">
-                    <span
-                        className="bg-mainFontBold flex justify-center items-center rounded-2xl"
-                        style={{ width: `${percentage}%` }}
-                    >
-                        {percentage.toFixed(0)}%
-                    </span>
+                <div className="bg-mainWhite rounded-2xl flex w-full justify-end">
+                    {percentage > 0 && (
+                        <span
+                            className="bg-mainFontBold flex justify-center items-center rounded-2xl"
+                            style={{ width: `${percentage}%` }}
+                        >
+                            {percentage.toFixed(0)}%
+                        </span>
+                    )}
                 </div>
             </div>
 

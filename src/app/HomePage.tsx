@@ -13,7 +13,7 @@ import useAuth from "../hooks/useAuth";
 export default function HomePage() {
 
     const { loadByMonth, transactions } = useTransaction();
-    const { categories } = useCategory();
+    const { loadCategories, categories } = useCategory();
     const { saldo, despesas } = calculateSummary(transactions);
     const { dataUser } = useAuth();
     
@@ -40,6 +40,7 @@ export default function HomePage() {
     useEffect(()=>{
       if(dataUser?.id){
         loadByMonth((month +1), year, dataUser.id);
+        loadCategories(dataUser.id)
       }
     },[dataUser]);
 
@@ -70,7 +71,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <div className="mt-3 bg-mainLightGreen rounded-4xl text-mainFontBold/65 p-6">
+            <div className="mt-3 bg-mainLightGreen rounded-2xl text-mainFontBold/65 p-6">
               <h2 className="font-semibold uppercase">
                 {monthName} {year}
               </h2>

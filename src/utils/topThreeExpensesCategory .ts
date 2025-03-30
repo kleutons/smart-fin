@@ -35,6 +35,8 @@ export const topThreeExpensesCategory = (
       .filter((transaction) => transaction.amount >= 0)
       .reduce((sum, transaction) => sum + transaction.amount, 0);
   
+    const totalNegative = negativeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+
     // Criar lista de despesas com informações das categorias
     const categoryExpenses: CategoryExpense[] = Object.entries(
       expensesByCategory
@@ -45,7 +47,7 @@ export const topThreeExpensesCategory = (
           name: category.name,
           icon: category.icon,
           total: total,
-          percentage: Math.round(Math.abs((total / totalPositive) * 100)), // Arredonda a porcentagem para o inteiro mais próximo
+          percentage: Math.round(Math.abs((total / (totalPositive <= 0 ? totalNegative : totalPositive)) * 100)), // Arredonda a porcentagem para o inteiro mais próximo
         };
       }
       return null as unknown as CategoryExpense;

@@ -9,7 +9,7 @@ interface SelectProps {
 export default function Select({ addClass, options, selectedValue, placeholder, onChange }: SelectProps) {
     return (
         <select
-            className={`bg-mainLightGreen text-mainFontBold rounded-xl p-2  ${addClass}`}
+            className={`bg-mainLightGreen text-mainFontBold rounded-lg p-2  ${addClass}`}
             value={selectedValue || ""}
             onChange={(e) => onChange(parseInt(e.target.value))}
             required

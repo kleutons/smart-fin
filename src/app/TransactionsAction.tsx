@@ -29,6 +29,7 @@ export default function TransactionsAction(){
                                         userId: dataUser?.id ? dataUser.id : 0 
                                     };
     const [editData, setEditData] = useState<TypeTransaction>(emptyData);
+    const [isExpense, setIsExpense] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -37,7 +38,29 @@ export default function TransactionsAction(){
         return categories.map((item)=>({ value: item.id, label: item.name }))
     };
 
-    
+    // Função para lidar com a mudança no checkbox
+    const handleCheckboxChange = (checked: boolean) => {
+        setIsExpense(checked);
+  
+        setEditData((prev) => ({
+            ...prev,
+            amount: editData.amount * -1 ,
+        }));
+    };
+
+    // Função para lidar com a mudança no input de valor
+    const handleAmountChange = (value: number) => {
+
+        setIsExpense(value < 0 ? true : isExpense);
+        
+        setEditData((prev) => ({
+            ...prev,
+            amount: isExpense && value > 0 ? value * -1 : value,
+        }));
+    };
+
+
+
      // Carregar para edição
     useEffect(() => {
     if (idTransaction) {
@@ -45,6 +68,7 @@ export default function TransactionsAction(){
         const itemEdit = await getById(idTransaction);
         if (itemEdit) {
             setEditData(itemEdit);
+            setIsExpense(itemEdit.amount < 0 ? true : false);
         }
         };
         loadTransaction();
@@ -118,9 +142,24 @@ export default function TransactionsAction(){
                             selectedValue={editData.categoryId  ? editData.categoryId : 0}
                             onChange={handleSelectCategory}  />
                     </div>
-                    <Input type="number" label="Valor:" required 
+                    
+                    <div className="pt-3">
+                        <label className="inline-flex items-center cursor-pointer">
+                            <input 
+                                type="checkbox" value="" 
+                                className="sr-only peer" 
+                                checked={isExpense}
+                                onChange={(e) => handleCheckboxChange(e.target.checked)}
+                             />
+                            <div className="relative w-11 h-6 ml-3 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500/80"></div>
+                            <span className="ms-3 text-sm font-medium text-mainFontBold/70">Despesa?</span>
+                        </label>
+                    </div>
+
+                    <Input type="number" label="Valor R$:" required 
                          value={editData.amount ? editData.amount : ''}
-                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditData((prev) => ({ ...prev, amount: parseFloat(e.target.value) }))}
+                         addClass={editData.amount < 0 ? 'text-2xl text-rose-500' : 'text-2xl'}
+                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleAmountChange(Number(e.target.value))}
                     />
                 </div>
                 
