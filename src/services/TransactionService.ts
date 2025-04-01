@@ -56,6 +56,7 @@ class TransactionService {
     // Criar intervalo de busca para o mês e ano fornecidos
     const startDate = new Date(year, month - 1, 1); // Primeiro dia do mês
     const endDate = new Date(year, month, 0); // Último dia do mês
+    endDate.setHours(23, 59, 59, 999); // ultimo segundo
     const range = IDBKeyRange.bound(startDate, endDate, false, false); // Intervalo de datas
 
     let cursor = await index.openCursor(range);

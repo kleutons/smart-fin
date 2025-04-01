@@ -109,6 +109,12 @@ export default function TransactionsAction(){
         }
     }
 
+    const handleData = (data:string) => {
+        const [year, month, day] = data.split('-').map(Number);
+        const localDate = new Date(year, month - 1, day); 
+        setEditData((prev) => ({ ...prev, date: localDate }))
+    }
+
     return(
         <>
         <ContainerTop>
@@ -127,9 +133,7 @@ export default function TransactionsAction(){
                 <div className="flex flex-col gap-3">
                     <Input type="date" label="Data:" required 
                         value={editData.date ? new Date(editData.date).toISOString().split('T')[0] : ''} 
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                            setEditData((prev) => ({ ...prev, date: new Date(e.target.value) }))
-                        }   />
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleData(e.target.value)}   />
                     <Input label="Nome da Transação:" required
                         value={editData.name !== '' ? editData.name : ''}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditData((prev) => ({ ...prev, name: e.target.value }))} 
